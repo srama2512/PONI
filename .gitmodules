@@ -1,0 +1,9 @@
+[submodule "dependencies/habitat-lab"]
+	path = dependencies/habitat-lab
+	url = git@github.com:facebookresearch/habitat-lab.git
+[submodule "dependencies/astar_pycpp"]
+	path = dependencies/astar_pycpp
+	url = git@github.com:srama2512/astar_pycpp.git
+[submodule "dependencies/habitat-sim"]
+	path = dependencies/habitat-sim
+	url = git@github.com:facebookresearch/habitat-sim.git
