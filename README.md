@@ -123,9 +123,26 @@ We release pre-trained models from the experiments in our paper:
 | Predict-action |   MP3D  |                            | [pred_act_123.ckpt](https://utexas.box.com/s/1bx2rw3jrojhh2xrmwm3x2w7ftkwi6nq) |                            |
 
 
-## ObjectNav evaluation
+You can also download all models from [here](https://utexas.box.com/s/0v59eqktjs7hicbd16p2etlz2cn3w6g9):
+```
+mkdir $PONI_ROOT/pretrained_models && cd $PONI_ROOT/pretrained_models
+wget -O pretrained_models.tar.gz https://utexas.box.com/shared/static/0v59eqktjs7hicbd16p2etlz2cn3w6g9.gz
+tar -xvzf pretrained_models.tar.gz && rm pretrained_models.tar.gz
+```
 
-The code for ObjectNav evaluation will be available soon.
+## ObjectNav evaluation on Gibson
+
+We use a modified version of the Gibson ObjectNav evaluation setup from [SemExp](https://github.com/devendrachaplot/Object-Goal-Navigation).
+
+1. Download the [Gibson ObjectNav dataset](https://utexas.box.com/s/tss7udt3ralioalb6eskj3z3spuvwz7v) to `$PONI_ROOT/data/datasets/objectnav/gibson`.
+    ```
+    cd $PONI_ROOT/data/datasets/objectnav
+    wget -O gibson_objectnav_episodes.tar.gz https://utexas.box.com/shared/static/tss7udt3ralioalb6eskj3z3spuvwz7v.gz
+    tar -xvzf gibson_objectnav_episodes.tar.gz && rm gibson_objectnav_episodes.tar.gz
+    ```
+2. Copy the evaluation script corresponding to the model of interest from `$PONI_ROOT/experiment_scripts/gibson/eval_<METHOD_NAME>.sh` to the required experiment directory. 
+3. Set the `MODEL_PATH` variable in the script to the saved checkpoint. By default, it points to the path of a pre-trained model (see below).
+4. To reproduce results from the paper, download the pre-trained models (see previous section) and evaluate them using the evaluation scripts.
 
 
 ## Acknowledgements
