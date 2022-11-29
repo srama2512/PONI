@@ -68,7 +68,7 @@ class Sem_Exp_Env_Agent(MultiObjectGoal_Env):
             self.num_conseq_fwd = None
 
         if args.visualize or args.print_images:
-            self.legend = cv2.imread("docs/legend.png")
+            self.legend = cv2.imread("docs/legend_gibson.png")
             self.vis_image = None
             self.rgb_vis = None
             self.video_writer = None
