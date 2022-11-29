@@ -113,8 +113,6 @@ class MultiObjectGoal_Env(habitat.RLEnv):
         self.trajectory_states = []
         self.episode_progress = None
         self.episode_progress_dists = None
-        # self.optimal_agent_progress = None
-        # self.actual_agent_progress = None
         self.info = {}
         self.info["ppl"] = None
         self.info["spl"] = None
@@ -221,11 +219,6 @@ class MultiObjectGoal_Env(habitat.RLEnv):
                     f"Goal #{i}\n"
                 )
             ########################################################################################
-            # assert success_condition, \
-            #     f"load_new_episode(): Goal is unreachable from start!\n" \
-            #     f"Distance to goal: {planner.fmm_dist[int(pos[0]), int(pos[1])]:.3f}\n" \
-            #     f"Max distance on map: {planner.fmm_dist.max().item():.3f}\n" \
-            #     f"Goal #{i}\n"
 
         self.gt_planners = planners
         self.traversible = traversible
@@ -300,7 +293,6 @@ class MultiObjectGoal_Env(habitat.RLEnv):
         traversible = cv2.dilate(sem_map[0], selem)
 
         loc_found = False
-        # print(f'=======> Starting episode search for {scene_name}')
         while not loc_found:
             if len(possible_cats) < self.args.num_goals:
                 print(
@@ -362,7 +354,6 @@ class MultiObjectGoal_Env(habitat.RLEnv):
                 self.dataset_info[scene_name][floor_idx]["sem_map"][
                     goal_idxs[0] + self.cat_offset, :, :
                 ] = 0.0
-        # print(f'=======> Finished episode search for {scene_name}')
 
         loc_found = False
         loop_count = 0
@@ -376,13 +367,11 @@ class MultiObjectGoal_Env(habitat.RLEnv):
             if is_same_floor and possible_starting_locs[map_loc[0], map_loc[1]] == 1:
                 loc_found = True
             loop_count += 1
-            # print(loop_count, is_same_floor, pos[1], floor_height)
             if loop_count > 10000 and is_same_floor:
                 print("========> Exceeded loop 2 count, selecting random starting loc")
                 loc_found = True
                 break
 
-        # print(f'=======> Found object and starting location successfully for {scene_name}')
         agent_state = self._env.sim.get_agent_state(0)
         rotation = agent_state.rotation
         rvec = quaternion.as_rotation_vector(rotation)
@@ -400,10 +389,8 @@ class MultiObjectGoal_Env(habitat.RLEnv):
         self.map_obj_origin = map_obj_origin
         self.sem_map = sem_map
 
-        # print(f'=======> Starting shortest path calculation for {scene_name}')
         sdists, glocs = self.get_multi_goal_shortest_path_length(traversible)
         gsdists, gglocs = self.get_multi_goal_greedy_path_length(traversible)
-        # print(f'=======> Finished shortest path calculation for {scene_name}')
         self.starting_distances = sdists
         self.starting_greedy_distances = gsdists
         self.optimal_goal_locs = glocs
@@ -518,10 +505,7 @@ class MultiObjectGoal_Env(habitat.RLEnv):
         depth = obs["depth"]
         state = [rgb, depth]
         if args.use_gt_segmentation:
-            dummy_sem = np.zeros_like(depth)
-            dummy_sem[:, :] = 15
-            state.append(dummy_sem)
-            # state.append(obs['semantic_category'][..., np.newaxis])
+            state.append(obs["semantic_category"][..., np.newaxis])
         state = np.concatenate(state, axis=2).transpose(2, 0, 1)
         self.last_sim_location = self.get_sim_location()
         agent_state = super().habitat_env.sim.get_agent_state(0)
@@ -652,36 +636,11 @@ class MultiObjectGoal_Env(habitat.RLEnv):
                 self.episode_progress[self.active_goal_ix] = 1.0
                 self.episode_progress_dists[self.active_goal_ix] = self.path_length
 
-        # Object category rewards
-        latest_metrics = self.get_info(observations)
-
         self.prev_distance = self.curr_distance
         return reward
 
     def get_multi_goal_greedy_path_length(self, traversible):
-        """This function computes the greedy path length from starting
-        position through all the goals in sequence.
-        """
         return self.get_multi_goal_shortest_path_length(traversible)
-        # TODO(SR) - model runs into infinite loop here. fix this bug
-        # curr_loc = self.starting_loc
-        # greedy_distances = []
-        # greedy_goal_locs = []
-        # total_dist = 0.0
-        # for planner in self.gt_planners:
-        #     dist = planner.fmm_dist[int(curr_loc[0]), int(curr_loc[1])]\
-        #         / 20.0 + self.object_boundary
-        #     total_dist += dist
-        #     greedy_distances.append(total_dist)
-        #     # Find goal location that is nearest to curr_loc
-        #     while True:
-        #         next_y, next_x, _, stop = planner.get_short_term_goal(curr_loc)
-        #         if stop:
-        #             break
-        #         curr_loc = (int(next_y), int(next_x))
-        #     greedy_goal_locs.append(curr_loc)
-
-        # return greedy_distances, greedy_goal_locs
 
     def get_multi_goal_shortest_path_length(self, traversible):
         """This function computes the shortest path length from starting
