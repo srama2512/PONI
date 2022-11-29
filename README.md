@@ -143,6 +143,7 @@ We use a modified version of the Gibson ObjectNav evaluation setup from [SemExp]
 2. Copy the evaluation script corresponding to the model of interest from `$PONI_ROOT/experiment_scripts/gibson/eval_<METHOD_NAME>.sh` to the required experiment directory. 
 3. Set the `MODEL_PATH` variable in the script to the saved checkpoint. By default, it points to the path of a pre-trained model (see previous section).
 4. To reproduce results from the paper, download the pre-trained models and evaluate them using the evaluation scripts.
+5. To visualize episodes with the semantic map and potential function predictions, add the arguments `--print_images 1 --num_pf_maps 3` in the evaluation script.
 
 
 ## Acknowledgements
