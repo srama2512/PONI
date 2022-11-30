@@ -1,0 +1,28 @@
+BASE_TASK_CONFIG_PATH: "transfer_configs/objectnav_mp3d.yaml"
+ENV_NAME: "NavRLEnv"
+SIMULATOR_GPU_ID: 0
+TORCH_GPU_ID: 0
+VIDEO_OPTION: []
+TENSORBOARD_DIR: "tb"
+VIDEO_DIR: "video_dir"
+TEST_EPISODE_COUNT: -1
+EVAL_CKPT_PATH_DIR: "data/new_checkpoints"
+NUM_ENVIRONMENTS: 1
+CHECKPOINT_FOLDER: "data/new_checkpoints"
+TRAINER_NAME: "transfer_evaluator"
+SENSORS: ["DEPTH_SENSOR", "RGB_SENSOR"]
+NUM_UPDATES: 270000
+LOG_INTERVAL: 10
+NUM_CHECKPOINTS: 100
+# Force PyTorch to be single threaded as
+# this improves performance considerably
+FORCE_TORCH_SINGLE_THREADED: True
+
+EVAL:
+  SPLIT: "val"
+
+GLOBAL_AGENT:
+  name: "SemExp"
+
+SEM_EXP_POLICY:
+  pretrained_weights: '../pretrained_models/sem_exp.pth'
