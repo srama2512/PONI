@@ -96,6 +96,7 @@ export PYTHONPATH=$PYTHONPATH:$PONI_ROOT
     ACTIVE_DATASET="mp3d" python scripts/create_poni_dataset.py --split "val"
     ```
 4. The extracted data can be visualized using [notebooks/visualize_pfs.ipynb](notebooks/visualize_pfs.ipynb).
+5. The `create_poni_dataset.py` script also supports parallelized dataset creation. The `--map-id` argument can be used to limit the data generation to one specific map. The `--map-id-range` argument can be used to limit the data generation to maps in range `i` to `j` as follows: `--map-id-range i j`. These arguments can be used to divide the data generation across multiple processes within a node or on a cluster with SLURM by passing the appropriate map ids to each job.
 
 
 ## Training
