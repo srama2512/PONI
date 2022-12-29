@@ -21,7 +21,9 @@ Target dir: `$PONI_ROOT/data/scene_datasets/mp3d`
     ```
     python download_mp.py --type matterport_mesh -o $PONI_ROOT/data/scene_datasets/mp3d_uncompressed
     ```
-* Conversion to GLB can be performed using existing tools like [assimp](https://github.com/assimp/assimp).
+* Conversion to GLB can be performed using trimesh. Note: The *.ply files from `$PONI_ROOT/data/scene_datasets/mp3d` can be copied over to `$PONI_ROOT/data/scene_datasets/mp3d_uncompressed`.
     ```
-    assimp export <OBJ FILE> <GLB PATH>
+    import trimesh
+    scene = trimesh.load(obj_file_path)
+    scene.export(glb_file_path)
     ```
